@@ -23,7 +23,9 @@ default['apache']['mpm'] =
   when 'debian'
     case node['platform']
     when 'ubuntu'
-      if node['platform_version'].to_f >= 14.04
+      if node['platform_version'].to_f >= 16.04
+        'prefork'
+      elsif node['platform_version'].to_f >= 14.04
         'event'
       elsif node['platform_version'].to_f >= 12.04
         'worker'
