@@ -75,7 +75,16 @@ file "#{node['apache']['dir']}/conf.d/php.conf" do
   backup false
 end
 
-apache_module 'php5' do
+case node['platform_family']
+when 'debian'
+  if node['lsb']['release'].to_f >= 16.04
+    modulen_name = 'php'
+  else
+    module_name = 'php5'
+  end
+end
+
+apache_module "#{module_name}" do
   conf true
   filename node['apache']['mod_php5']['so_filename']
 end
