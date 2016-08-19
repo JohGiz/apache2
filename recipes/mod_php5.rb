@@ -84,7 +84,7 @@ when 'debian'
   end
 end
 
-apache_module "#{module_name}" do
+apache_module module_name do
   conf true
   filename node['apache']['mod_php5']['so_filename']
 end
