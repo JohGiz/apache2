@@ -23,3 +23,7 @@ default['apache']['mod_php5']['so_filename'] = 'mod_php5.so' if node['platform_f
 if node['platform'] == 'amazon' && node['apache']['version'] == '2.4'
   default['apache']['mod_php5']['so_filename'] = 'libphp.so'
 end
+
+if node['platform'] == 'ubuntu' &&  node['lsb']['release'].to_f >= 16.04
+  default['apache']['mod_php5']['so_filename'] = 'libphp7.0.so'
+end
