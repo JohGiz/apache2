@@ -77,14 +77,16 @@ end
 
 case node['platform_family']
 when 'debian'
-  if node['lsb']['release'].to_f >= 16.04
-    modulen_name = 'php'
-  else
-    module_name = 'php5'
+  if node['lsb']['release'].to_f < 16.04
+    apache_module module_name do
+      conf true
+      filename node['apache']['mod_php5']['so_filename']
+    end
+  end
+else
+  apache_module module_name do
+    conf true
+    filename node['apache']['mod_php5']['so_filename']
   end
 end
 
-apache_module module_name do
-  conf true
-  filename node['apache']['mod_php5']['so_filename']
-end
