@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apache2
-# Recipe:: mod_php5
+# Recipe:: mod_php
 #
 # Copyright 2008-2013, Chef Software, Inc.
 # Copyright 2014, OneHealth Solutions, Inc.
@@ -41,12 +41,10 @@ when 'rhel'
   package 'php package' do
     if node['platform_version'].to_f < 6.0 && node['platform'] != 'amazon'
       package_name 'php53'
+    elsif node['php']['version'].to_f >= 7.0
+		package_name 'php70'
     else
-		if node['php']['version'].to_f >= 7.0
-			package_name 'php70-fpm'
-		else
-			package_name 'php'
-		end
+      package_name 'php'
     end
     notifies :run, 'execute[generate-module-list]', :immediately
     not_if 'which php'
@@ -74,24 +72,25 @@ when 'freebsd'
   end
 end unless node['apache']['mod_php5']['install_method'] == 'source'
 
-file "#{node['apache']['dir']}/conf.d/php.conf" do
-  action :delete
-  backup false
-end
+#file "#{node['apache']['dir']}/conf.d/php.conf" do
+#  action :delete
+#  backup false
+#end
 
 case node['platform_family']
 when 'debian'
   if node['lsb']['release'].to_f < 16.04
-    apache_module 'php' do
+    apache_module module_name do
       conf true
       filename node['apache']['mod_php5']['so_filename']
     end
   end
+when 'rhel'
+	if node['php']['version'].to_f >= 7.0
+		package 'php70-fpm'
+	end
 else
-  if node['php']['version'].to_f >= 7.0
-	
-  end
-  apache_module 'php5' do
+  apache_module module_name do
     conf true
     filename node['apache']['mod_php5']['so_filename']
   end
