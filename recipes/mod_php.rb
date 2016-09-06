@@ -88,6 +88,9 @@ when 'debian'
 when 'rhel'
 	if node['php']['version'].to_f >= 7.0
 		package 'php70-fpm'
+		apache_module 'php-7.0' do
+			conf true
+		end
 	end
 else
   apache_module module_name do
@@ -95,4 +98,5 @@ else
     filename node['apache']['mod_php5']['so_filename']
   end
 end
+
 
