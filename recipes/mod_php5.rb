@@ -42,7 +42,11 @@ when 'rhel'
     if node['platform_version'].to_f < 6.0 && node['platform'] != 'amazon'
       package_name 'php53'
     else
-      package_name 'php'
+		if node['php']['version'].to_f >= 7.0
+			package_name 'php70-fpm'
+		else
+			package_name 'php'
+		end
     end
     notifies :run, 'execute[generate-module-list]', :immediately
     not_if 'which php'
@@ -78,13 +82,16 @@ end
 case node['platform_family']
 when 'debian'
   if node['lsb']['release'].to_f < 16.04
-    apache_module module_name do
+    apache_module 'php' do
       conf true
       filename node['apache']['mod_php5']['so_filename']
     end
   end
 else
-  apache_module module_name do
+  if node['php']['version'].to_f >= 7.0
+	
+  end
+  apache_module 'php5' do
     conf true
     filename node['apache']['mod_php5']['so_filename']
   end
