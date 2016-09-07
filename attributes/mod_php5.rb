@@ -27,3 +27,7 @@ end
 if node['platform'] == 'ubuntu' &&  node['lsb']['release'].to_f >= 16.04
   default['apache']['mod_php5']['so_filename'] = 'libphp7.0.so'
 end
+
+if node['platform'] == 'amazon' && node['php']['version'].to_f >= 7.0
+  default['apache']['mod_php5']['so_filename'] = 'libphp7.0.so'
+end

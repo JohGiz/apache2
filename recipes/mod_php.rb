@@ -77,26 +77,9 @@ end unless node['apache']['mod_php5']['install_method'] == 'source'
 #  backup false
 #end
 
-case node['platform_family']
-when 'debian'
-  if node['lsb']['release'].to_f < 16.04
-    apache_module module_name do
-      conf true
-      filename node['apache']['mod_php5']['so_filename']
-    end
-  end
-when 'rhel'
-	if node['php']['version'].to_f >= 7.0
-		package 'php70-fpm'
-		apache_module 'php-7.0' do
-			conf true
-		end
-	end
-else
-  apache_module module_name do
-    conf true
-    filename node['apache']['mod_php5']['so_filename']
-  end
+apache_module 'php' do
+	conf false
+	filename node['apache']['mod_php5']['so_filename']
 end
 
 
