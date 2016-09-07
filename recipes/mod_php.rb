@@ -78,7 +78,7 @@ end unless node['apache']['mod_php5']['install_method'] == 'source'
 #end
 
 apache_module 'php' do
-	conf false
+	conf true
 	filename node['apache']['mod_php5']['so_filename']
 end
 
